@@ -1,6 +1,6 @@
 # weather_module.py (Fake Student A)
 
-def get_weather(location):
+def get_weather(location): # Creating a function
     print(f"Fetching fake weather for {location}...")
     
     # We are returning a dictionary that mimics the JSON contract we agreed on
