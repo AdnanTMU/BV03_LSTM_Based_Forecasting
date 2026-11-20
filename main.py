@@ -9,11 +9,6 @@ from solar_model import predict_solar
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-# 1. A simple test endpoint
-@app.get("/")
-def home():
-    return {"message": "Welcome to the Renewable Forecast API!"}
-
 # 2. The main endpoint that connects A, B, and C
 @app.get("/api/forecast")
 def get_forecast(location: str = "Toronto"):
@@ -34,6 +29,10 @@ def get_forecast(location: str = "Toronto"):
         "solar_forecast": solar_data
     }
     
+@app.get("/", response_class=HTMLResponse)
+def serve_ui(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 @app.get("/", response_class=HTMLResponse)
 def serve_ui(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
