@@ -1,10 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 # Import the fake modules we just made
 from weather_module import get_weather
 from wind_model import predict_wind
 from solar_model import predict_solar
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 # 1. A simple test endpoint
 @app.get("/")
@@ -30,3 +33,7 @@ def get_forecast(location: str = "Toronto"):
         "wind_forecast": wind_data,
         "solar_forecast": solar_data
     }
+    
+@app.get("/", response_class=HTMLResponse)
+def serve_ui(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
