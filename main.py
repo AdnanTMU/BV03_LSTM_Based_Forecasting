@@ -11,8 +11,6 @@ from solar_model import predict_solar
 
 app = FastAPI()
 
-# Absolute path to the templates folder, so it works no matter which
-# directory you start uvicorn from (and inside a container on Azure).
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
@@ -36,9 +34,6 @@ def get_forecast(location: str = "Toronto"):
         "solar_forecast": solar_data,
     }
 
-
-# Only ONE "/" route. The old duplicate used the deprecated
-# TemplateResponse("index.html", {...}) form and was the one FastAPI used.
 @app.get("/", response_class=HTMLResponse)
 def serve_ui(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
