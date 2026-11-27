@@ -47,7 +47,10 @@
             document.getElementById('solarOutput').innerText = "Loading...";
 
             try {
-                const response = await fetch(`/api/forecast?location=${location}`);
+                const response = await fetch(`/api/forecast?location=${encodeURIComponent(location)}`);
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status} ${response.statusText}`);
+                }
                 const data = await response.json();
 
                 document.getElementById('weatherOutput').innerText = JSON.stringify(data.weather.forecast, null, 2);
@@ -55,6 +58,11 @@
                 document.getElementById('solarOutput').innerText = JSON.stringify(data.solar_forecast.forecast, null, 2);
             } catch (error) {
                 console.error("Error:", error);
+                // Show the error on the page instead of leaving "Loading..." forever
+                const msg = "Error: " + error.message;
+                document.getElementById('weatherOutput').innerText = msg;
+                document.getElementById('windOutput').innerText = msg;
+                document.getElementById('solarOutput').innerText = msg;
             }
         }
     </script>
